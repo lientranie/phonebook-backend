@@ -4,10 +4,15 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('build'))
 app.use(cors())
 
 // use Morgan middleware with "tiny" configuration for logging
 //app.use(morgan('tiny'));
+// Handle any requests that don’t match the ones above by serving the frontend’s index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
+})
 
 // custom token to log request body
 morgan.token('body', (request) => JSON.stringify(request.body))
